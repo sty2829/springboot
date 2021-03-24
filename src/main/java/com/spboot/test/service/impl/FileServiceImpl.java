@@ -45,9 +45,14 @@ public class FileServiceImpl implements FileService {
 	}
 
 	@Override
-	public List<FileInfo> getFileInfos() {
+	public List<FileInfo> getFileInfos(FileInfo fileInfo) {
+		if(fileInfo.getFiiTitle() != null) {
+			return fileRepo.findAllByFiiTitleOrderByFiiNumAsc(fileInfo.getFiiTitle());
+		}
+		if(fileInfo.getFiiContent() != null) {
+			return fileRepo.findAllByFiiContentLikeOrderByFiiNumAsc("%" + fileInfo.getFiiContent() + "%");
+		}
 		List<FileInfo> fileInfoList = fileRepo.findAllByOrderByFiiNumDesc();
-		log.info("fileInfoList => {}", fileInfoList);
 		return fileInfoList;
 	}
 
@@ -56,6 +61,21 @@ public class FileServiceImpl implements FileService {
 		FileInfo fileInfo = fileRepo.getOne(fiiNum);
 		log.info("fileInfo =>{}", fileInfo);
 		return fileInfo;
+	}
+
+	@Override
+	public int updateFileInfo(FileInfo fi) {
+		FileInfo fileInfo = fileRepo.getOne(fi.getFiiNum());
+		if(fileInfo.getFiiNum() == fi.getFiiNum()) {
+			fileRepo.flush();
+		}
+		return 1;
+	}
+
+	@Override
+	public int deleteFileInfo(FileInfo fi) {
+		fileRepo.delete(fi);
+		return 1;
 	}
 
 }

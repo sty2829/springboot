@@ -9,4 +9,8 @@ import com.spboot.test.entity.FileInfo;
 public interface FileRepository extends JpaRepository<FileInfo, Long> {
 
 	List<FileInfo> findAllByOrderByFiiNumDesc();
+	
+	List<FileInfo> findAllByFiiTitleOrderByFiiNumAsc(String fiiTitle);
+
+	List<FileInfo> findAllByFiiContentLikeOrderByFiiNumAsc(String fiiContent);
 }
